@@ -1,0 +1,170 @@
+{
+  "USB-C": {
+    "image": "",
+    "description": {
+      "english": "its a descriptor for USB-C",
+      "japanese": "USB-Cです。"
+    }
+  },
+  "USB 3": {
+    "image": "",
+    "description": {
+      "english": "its a descriptor for USB 3",
+      "japanese": "USB 3です。"
+    }
+  },
+  "Thunderbolt 3": {
+    "image": "",
+    "description": {
+      "english": "Thunderbolt™ 3 brings Thunderbolt to USB-C at speeds up to 40 Gbps, creating one compact port that does it all - delivering the fastest, most versatile connection to any dock, display, or data device. For the first time, one computer port connects to Thunderbolt devices, every display, and billions of USB devices.<br> This is a test line",
+      "japanese": "Thunderbolt 3です。"
+    }
+  },
+  "DisplayPort": {
+    "image": "",
+    "description": {
+      "english": "its a descriptor for DisplayPort",
+      "japanese": "DisplayPortです。"
+    }
+  },
+  "USB-C + 12V power adapter": {
+    "image": "",
+    "description": {
+      "english": "its a descriptor for USB-C + 12V power adapter",
+      "japanese": "USB-C + 12V power adapterです。"
+    }
+  },
+  "USB-A + 12V power adapter": {
+    "image": "",
+    "description": {
+      "english": "its a descriptor for USB-A + 12V power adapter",
+      "japanese": "USB-A + 12V power adapterです。"
+    }
+  },
+  "USB-A": {
+    "image": "",
+    "description": {
+      "english": "its a descriptor for USB-A",
+      "japanese": "USB-Aです。"
+    }
+  },
+  "VGA + USB 2.0": {
+    "image": "",
+    "description": {
+      "english": "its a descriptor for VGA + USB 2.0",
+      "japanese": "VGA + USB 2.0です。"
+    }
+  },
+  "4K HDMI 2.0": {
+    "image": "",
+    "description": {
+      "english": "its a descriptor for 4K HDMI 2.0",
+      "japanese": "4K HDMI 2.0です。"
+    }
+  },
+  "DVI": {
+    "image": "",
+    "description": {
+      "english": "its a descriptor for DVI",
+      "japanese": "DVIです。"
+    }
+  },
+  "Gigabit Ethernet": {
+    "image": "",
+    "description": {
+      "english": "its a descriptor for Gigabit Ethernet",
+      "japanese": "Gigabit Ethernetです。"
+    }
+  },
+  "VGA": {
+    "image": "",
+    "description": {
+      "english": "its a descriptor for VGA",
+      "japanese": "VGAです。"
+    }
+  },
+  "4K@60Hz DP 1.2": {
+    "image": "",
+    "description": {
+      "english": "its a descriptor for 4K@60Hz DP 1.2",
+      "japanese": "4K@60Hz DP 1.2です。"
+    }
+  },
+  "4K@60Hz HDMI 2.0": {
+    "image": "",
+    "description": {
+      "english": "its a descriptor for 4K@60Hz HDMI 2.0",
+      "japanese": "4K@60Hz HDMI 2.0です。"
+    }
+  },
+  "4K@30Hz HDMI 1.4": {
+    "image": "",
+    "description": {
+      "english": "its a descriptor for 4K@30Hz HDMI 1.4",
+      "japanese": "4K@30Hz HDMI 1.4です。"
+    }
+  },
+  "2.5\" SATA SSD 5V": {
+    "image": "",
+    "description": {
+      "english": "its a descriptor for 2.5\" SATA SSD 5V",
+      "japanese": "2.5\" SATA SSD 5Vです。"
+    }
+  },
+  "2.5\" SATA HDD 5V": {
+    "image": "",
+    "description": {
+      "english": "its a descriptor for 2.5\" SATA HDD 5V",
+      "japanese": "2.5\" SATA HDD 5Vです。"
+    }
+  },
+  "2.5\" SATA SSD 12V": {
+    "image": "",
+    "description": {
+      "english": "its a descriptor for 2.5\" SATA SSD 12V",
+      "japanese": "2.5\" SATA SSD 12Vです。"
+    }
+  },
+  "3.5\" SATA HDD 12V": {
+    "image": "",
+    "description": {
+      "english": "its a descriptor for 3.5\" SATA HDD 12V",
+      "japanese": "3.5\" SATA HDD 12Vです。"
+    }
+  },
+  "1920x1080p@60Hz HDMI 1.4": {
+    "image": "",
+    "description": {
+      "english": "its a descriptor for 1920x1080p@60Hz HDMI 1.4",
+      "japanese": "1920x1080p@60Hz HDMI 1.4です。"
+    }
+  },
+  "HDMI": {
+    "image": "",
+    "description": {
+      "english": "its a descriptor for HDMI",
+      "japanese": "HDMIです。"
+    }
+  },
+  "USB 2": {
+    "image": "",
+    "description": {
+      "english": "its a descriptor for USB 2",
+      "japanese": "USB 2です。"
+    }
+  },
+  "Ehternet": {
+    "image": "",
+    "description": {
+      "english": "its a descriptor for Ehternet",
+      "japanese": "Ehternetです。"
+    }
+  },
+  "": {
+    "image": "",
+    "description": {
+      "english": "",
+      "japanese": ""
+    }
+  }
+}

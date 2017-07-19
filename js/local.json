@@ -1,0 +1,22 @@
+{
+  "comptitle": {
+    "english": "What do you need?",
+    "japanese": "test"
+  },
+  "hosttext": {
+    "english": "Trying to connect....",
+    "japanese": "test"
+  },
+  "targettext": {
+    "english": "with.....",
+    "japanese": "test"
+  },
+  "firstouttext": {
+    "english": "We can (probably) do that!",
+    "japanese": "test"
+  },
+  "secondouttext": {
+    "english": "Please check the system requirements for these products before purchasing. Certain systems don't work together, despite the presence of compatible physical connectors.",
+    "japanese": "test"
+  }
+}

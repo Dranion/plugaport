@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="js/compat.js"></script>
+    <title> Check Device Compatability</title>
+    <link rel="stylesheet" href="css/compatibility.css">
+  </head>
+
+  <body>
+
+    <div class="connectorform">
+
+      <h2 id="comptitle"></h2>
+
+      <form id="form" class="selectors">
+        <div class="center" id="host"> <span id="hosttext"> </span> <br>
+          <input list="host-connection" id="hostinput" onload="fill()">
+          <datalist id="host-connection"></datalist>
+
+          <img id="hostimg" class="compatiblityimg" /><br>
+          <p id="hostinfo" class="info">
+          </p>
+        </div>
+        <div class="center" id="target">
+          <span id="targettext"></span> <br>
+
+          <input list="target-connection" id="targetinput">
+          <datalist id="target-connection"></datalist>
+
+          <img id="targetimg" class="compatiblityimg" />
+          <p id="targetinfo" class="info"></p>
+        </div>
+      </form>
+      <img src="http://www.clker.com/cliparts/X/p/4/d/1/h/green-arrow-down-hi.png" class="resultarrow">
+      <br>
+      <div class="results">
+        <h3 id="firstouttext"> </h3>
+        <div id="out">
+        </div>
+        <p id="secondouttext" class="outtext"> </p>
+      </div>
+    </div>
+
+
+  </body>
+
+
+</html>

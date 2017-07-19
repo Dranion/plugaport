@@ -1,0 +1,88 @@
+/*Ideally this will be replaced with similar things from a master stylesheet. */
+
+.connectorform {
+  margin: 0 auto;
+  /* position the top  edge of the element at the middle of the parent */
+  left: 50%;
+  /* position the left edge of the element at the middle of the parent */
+  transform: translate(-50%, 0);
+  position: absolute;
+  text-align: center;
+  font-size: calc(14px + .5vmin);
+  width: 100%;
+  padding: 6px;
+  overflow: hidden;
+}
+
+input {
+  width: 10%;
+  min-width: 100px;
+  min-height: 14px;
+  max-height: 20px;
+  font-size: calc(10px + .8vmin);
+  height: 3vh;
+}
+
+#host {
+  float: left;
+}
+
+#target {
+  float: right;
+}
+
+.center {
+  width: 49%;
+  margin-left: 1%;
+}
+
+.selectors {
+  overflow: hidden;
+  min-height: contain-floats;
+  display: block;
+  margin-bottom: 0;
+}
+
+.compatiblityimg {
+  width: 14%;
+  min-width: 100px;
+  display: block;
+  margin: 0 auto;
+}
+
+.info {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.outlink {
+  margin: 0 auto;
+  display: inline-block;
+}
+
+.plugimg {
+  height: auto;
+  max-height: 200px;
+}
+
+#out {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.outtext {
+  visibility: hidden;
+  display: block;
+}
+
+.results {
+  display: block;
+  width: 100%;
+}
+
+.resultarrow {
+  height: 3vh;
+  width: 7vw;
+  position: relative;
+  margin-top: -3vh;
+}
