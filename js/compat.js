@@ -1,5 +1,3 @@
-/*jshint sub:true*/
-
 $(document).ready(function () {
     "use strict";
     var data, language = "english",
@@ -48,26 +46,28 @@ $(document).ready(function () {
     function listeners() {
         $('#hostinput').on('input', targetSet);
         $('#hostinput').on('click', clear);
-        $('#targetinput').on('input', function () {
-            var host = $('#hostinput').val(),
-                target = $('#targetinput').val();
-            if (data[host].hasOwnProperty(target)) {
-                imageset($('#targetimg'), target, true);
-                try {
-                    $('#targetinfo').html(info[target]["description"][language]);
-                } catch (err) {
-                    console.log(target + " either does not exist or does not have a translation for " + language);
-                    $('#targetinfo').html("");
-                }
-                output();
-            }
-        });
+        $('#targetinput').on('input', targetInput);
         $('#targetinput').on('click', function () {
             $('#targetinput').val("");
         });
         $('#hostinput').on('focus', function () {
             $('#targetimg').html('');
         });
+    }
+
+    function targetInput() {
+        var host = $('#hostinput').val(),
+            target = $('#targetinput').val();
+        if (data[host].hasOwnProperty(target)) {
+            imageset($('#targetimg'), target, true);
+            try {
+                $('#targetinfo').html(info[target]["description"][language]);
+            } catch (err) {
+                console.log(target + " either does not exist or does not have a translation for " + language);
+                $('#targetinfo').html("");
+            }
+            output();
+        }
     }
 
     function targetSet() {
@@ -127,7 +127,7 @@ $(document).ready(function () {
         $('#secondouttext').attr("style", "visibility:'hidden'");
         $('#out').html("");
         $('#hostinfo').html("");
-        $('targetinfo').html("");
+        $('#targetinfo').html("");
         $('#hostinput').val("");
         $('#hostimg').attr("src", "");
         $('#targetimg').attr("src", "");

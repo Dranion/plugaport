@@ -1,5 +1,3 @@
-/*Ideally this will be replaced with similar things from a master stylesheet. */
-
 .connectorform {
   margin: 0 auto;
   /* position the top  edge of the element at the middle of the parent */
@@ -44,7 +42,7 @@ input {
 }
 
 .compatiblityimg {
-  width: 14%;
+  width: 30%;
   min-width: 100px;
   display: block;
   margin: 0 auto;
@@ -82,7 +80,9 @@ input {
 
 .resultarrow {
   height: 3vh;
-  width: 7vw;
+  min-height: 75px;
+  min-width: 25px;
+  width: 5vw;
   position: relative;
   margin-top: -3vh;
 }
