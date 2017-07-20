@@ -20,7 +20,7 @@ $(document).ready(function () {
     }
 
     function localize() {
-        var url = "json/local.json";
+        var url = "js/local.json";
         local = $.getJSON(url).fail(function (jqxhr, textStatus, error) {
             var err = textStatus + ", " + error;
             console.error("Request Failed for local.json : " + err);
@@ -40,7 +40,7 @@ $(document).ready(function () {
     }
 
     function load() {
-        data = $.getJSON("json/compatibility.json", function (data) {
+        data = $.getJSON("download/compatibility.json", function (data) {
             var hosts = [];
             $.each(data, function (key) {
                 hosts.push('<option value = "' + key + '"/>');
@@ -55,7 +55,7 @@ $(document).ready(function () {
             console.error("Request Failed for compatability.json : " + err);
         });
 
-        info = $.getJSON("json/information.json");
+        info = $.getJSON("download/information.json");
         info.done(function () {
             info = info.responseJSON;
         });
