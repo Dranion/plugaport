@@ -5,7 +5,7 @@ $(document).ready(function () {
     getLang();
     localize();
     load();
-    listeners();
+
 
     function getLang() {
         var url = (window.location != window.parent.location) ?
@@ -22,8 +22,7 @@ $(document).ready(function () {
     function localize() {
         var url = "js/local.json";
         local = $.getJSON(url).fail(function (jqxhr, textStatus, error) {
-            var err = textStatus + ", " + error;
-            console.error("Request Failed for local.json : " + err);
+            loadError(jqxhr, textStatus, error);
         });
         local.done(function () {
             local = local.responseJSON;
@@ -40,28 +39,43 @@ $(document).ready(function () {
     }
 
     function load() {
-        data = $.getJSON("download/compatibility.json", function (data) {
+        var compaturl = "download/compatibility.json";
+        var infourl = "download/information.json";
+        data = $.getJSON(compaturl, function (data) {
+            console.log('it was a scuess');
             var hosts = [];
             $.each(data, function (key) {
                 hosts.push('<option value = "' + key + '"/>');
             });
             $('#host-connection').html(hosts.join(""));
+            listeners();
         });
         data.done(function () {
             data = data.responseJSON;
         });
         data.fail(function (jqxhr, textStatus, error) {
-            var err = textStatus + ", " + error;
-            console.error("Request Failed for compatability.json : " + err);
+            loadError(jqxhr, textStatus, error, compaturl);
         });
 
-        info = $.getJSON("download/information.json");
+        info = $.getJSON(infourl);
         info.done(function () {
             info = info.responseJSON;
         });
         info.fail(function (jqxhr, textStatus, error) {
-            var err = textStatus + ", " + error;
-            console.error("Request Failed for information.json : " + err);
+            loadError(jqxhr, textStatus, error, infourl);
+        });
+    }
+
+    function loadError(jqxhr, textStatus, error, url) {
+        var err = textStatus + ", " + error;
+        console.error("Request Failed for " + url + " : " + err);
+
+        var php = $.get("download.php", function (data) {
+            console.log("attempting to download.... ");
+        });
+        php.done(function () {
+            console.log("download complete");
+            load()
         });
     }
 
