@@ -37,7 +37,7 @@ $(document).ready(function () {
         data.done(function () {
             data = data.responseJSON;
         });
-        //NOTE: Could instead put this into one line?
+
         info = $.getJSON("js/information.json");
         info.done(function () {
             info = info.responseJSON;
@@ -46,15 +46,9 @@ $(document).ready(function () {
 
     function listeners() {
         $('#hostinput').on('input', targetSet);
-        $('#hostinput').on('click', clear);
+        $('#hostinput').on('click', clearAll);
         $('#targetinput').on('input', targetInput);
-
-        $('#targetinput').on('click', function () {
-            $('#targetinput').val("");
-        });
-        $('#hostinput').on('focus', function () {
-            $('#targetimg').html('');
-        });
+        $('#targetinput').on('click', clearTarget);
     }
 
     function targetSet() {
@@ -82,9 +76,6 @@ $(document).ready(function () {
             output();
         }
     }
-
-
-
 
     function imageSet(img, val, local) {
         if (local) {
@@ -126,16 +117,23 @@ $(document).ready(function () {
         $('#secondouttext').attr("style", "visibility:visible");
     }
 
-    function clear() {
-        console.log("clearing....");
-        $('#secondouttext').attr("style", "visibility:'hidden'");
-        $('#out').html("");
+    function clearAll() {
         $('#hostinfo').html("");
-        $('#targetinfo').html("");
         $('#hostinput').val("");
         $('#hostimg').attr("src", "");
+        clearTarget();
+    }
+
+    function clearResults() {
+        $('#secondouttext').attr("style", "visibility:'hidden'");
+        $('#out').html("");
+    }
+
+    function clearTarget() {
         $('#targetimg').attr("src", "");
         $('#targetinput').html("");
         $('#targetinput').val("");
+        $('#targetinfo').html("");
+        clearResults();
     }
 });
