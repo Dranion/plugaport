@@ -1,16 +1,29 @@
 $(document).ready(function () {
     "use strict";
-    var data, language = "english",
-        local, info;
-    localize(language);
+    var data, language,
+        local, info, defaultLang = "en";
+    getLang();
+    localize();
     load();
     listeners();
 
-    function localize(language) {
+    function getLang() {
+        var url = (window.location != window.parent.location) ?
+            document.referrer :
+            document.location.href;
+        if (url.charAt(15) === "/") {
+            language = url.substr(13, 2);
+        } else {
+            console.warn("defaulting on lang. url " + url + " not found to have language clue");
+            language = defaultLang;
+        }
+    }
+
+    function localize() {
         var url = "js/local.json";
         local = $.getJSON(url).fail(function (jqxhr, textStatus, error) {
             var err = textStatus + ", " + error;
-            console.log("Request Failed: " + err);
+            console.error("Request Failed for local.json : " + err);
         });
         local.done(function () {
             local = local.responseJSON;
@@ -19,8 +32,8 @@ $(document).ready(function () {
                 if (local[i].hasOwnProperty(language)) {
                     $("#" + i).text(local[i][language]);
                 } else {
-                    console.log(i + " doesn't have language " + language);
-                    $("#" + i).text(local[i][0]);
+                    console.warn(i + " doesn't have language " + language);
+                    $("#" + i).text(local[i][defaultLang]);
                 }
             }
         });
@@ -37,10 +50,18 @@ $(document).ready(function () {
         data.done(function () {
             data = data.responseJSON;
         });
+        data.fail(function (jqxhr, textStatus, error) {
+            var err = textStatus + ", " + error;
+            console.error("Request Failed for compatability.json : " + err);
+        });
 
         info = $.getJSON("js/information.json");
         info.done(function () {
             info = info.responseJSON;
+        });
+        info.fail(function (jqxhr, textStatus, error) {
+            var err = textStatus + ", " + error;
+            console.error("Request Failed for information.json : " + err);
         });
     }
 
@@ -83,6 +104,7 @@ $(document).ready(function () {
         } else {
             img.attr("src", "http://plugable.com/images/" + val + "/main_256.jpg");
         }
+        img.attr("alt", "image of " + val);
         img.on('error', function () {
             this.style.visibility = 'hidden';
         });
@@ -93,11 +115,18 @@ $(document).ready(function () {
     }
 
     function infoSet(id) {
-        try {
-            $('#' + id + 'info').html(info[$('#' + id + 'input').val()]["description"][language]);
-        } catch (err) {
-            console.log($('#' + id + 'input').val() + " either does not exist or does not have a translation for " + language);
-            $('#' + id + 'info').html("");
+        var infotext = $('#' + id + 'info');
+        var val = $('#' + id + 'input').val();
+        if (info.hasOwnProperty(val)) {
+            if (info[val]["description"].hasOwnProperty(language)) {
+                infotext.html(info[val]["description"][language]);
+            } else {
+                console.warn(val + " has no translation for " + language + ". Defaulting to " + defaultLang);
+                infotext.html(info[val]["description"][defaultLang]);
+            }
+        } else {
+            console.warn(val + " has no listed description");
+            infotext.html("");
         }
     }
 
@@ -105,9 +134,9 @@ $(document).ready(function () {
         $('#out').html("");
         var str = data[$('#hostinput').val()][$('#targetinput').val()];
         var link;
-        //NOTE: Adding to DOM every time. May be better to do strings instead?
+        //NOTE: Adding to DOM every time. May be better t do strings instead?
         for (var i in str) {
-            $('#out').append("<a href='http://plugable.com/products/" + str[i] + "' class='outlink' target='_top'></a>");
+            $('#out').append("<a href='http://plugable.com/" + language + "/products/" + str[i] + "' class='outlink' target='_top'></a>");
             link = $('.outlink:eq(' + i + ")");
             link.append("");
             link.append("<span class='outvar'>" + str[i] + "</span><br>");

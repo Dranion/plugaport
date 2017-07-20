@@ -29,14 +29,13 @@ input {
   float: right;
 }
 
-.center {
+.side {
   width: 49%;
   margin-left: 1%;
 }
 
 .selectors {
   overflow: hidden;
-  min-height: contain-floats;
   display: block;
   margin-bottom: 0;
 }
