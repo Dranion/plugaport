@@ -12,6 +12,11 @@
   overflow: hidden;
 }
 
+#firstouttext {
+  font-weight: normal;
+  font-size: 1.1em;
+}
+
 input {
   width: 10%;
   min-width: 100px;
