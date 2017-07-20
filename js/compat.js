@@ -75,7 +75,7 @@ $(document).ready(function () {
         });
         php.done(function () {
             console.log("download complete");
-            load()
+            load();
         });
     }
 
