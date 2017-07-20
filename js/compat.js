@@ -37,6 +37,7 @@ $(document).ready(function () {
         data.done(function () {
             data = data.responseJSON;
         });
+        //NOTE: Could instead put this into one line?
         info = $.getJSON("js/information.json");
         info.done(function () {
             info = info.responseJSON;
@@ -47,6 +48,7 @@ $(document).ready(function () {
         $('#hostinput').on('input', targetSet);
         $('#hostinput').on('click', clear);
         $('#targetinput').on('input', targetInput);
+
         $('#targetinput').on('click', function () {
             $('#targetinput').val("");
         });
@@ -55,35 +57,14 @@ $(document).ready(function () {
         });
     }
 
-    function targetInput() {
-        var host = $('#hostinput').val(),
-            target = $('#targetinput').val();
-        if (data[host].hasOwnProperty(target)) {
-            imageset($('#targetimg'), target, true);
-            try {
-                $('#targetinfo').html(info[target]["description"][language]);
-            } catch (err) {
-                console.log(target + " either does not exist or does not have a translation for " + language);
-                $('#targetinfo').html("");
-            }
-            output();
-        }
-    }
-
     function targetSet() {
         var host = $('#hostinput').val();
         if (data.hasOwnProperty(host)) {
-            imageset($('#hostimg'), $('#hostinput').val(), true);
-            try {
-                $('#hostinfo').html(info[host]["description"][language]);
-            } catch (err) {
-                console.log(host + " either does not exist or does not have a translation for " + language);
-                $('#hostinfo').html("");
-            }
+            imageSet($('#hostimg'), $('#hostinput').val(), true);
+            infoSet("host");
             $('#target-connection').val("");
-            var targets = "",
-                i;
-            for (i in data[host]) {
+            var targets = "";
+            for (var i in data[host]) {
                 if (data[host].hasOwnProperty(i)) {
                     targets += '<option value = "' + i.replace('"', '&#34;') + '"/>';
                 }
@@ -92,7 +73,20 @@ $(document).ready(function () {
         }
     }
 
-    function imageset(img, val, local) {
+    function targetInput() {
+        var host = $('#hostinput').val(),
+            target = $('#targetinput').val();
+        if (data[host].hasOwnProperty(target)) {
+            imageSet($('#targetimg'), target, true);
+            infoSet("target");
+            output();
+        }
+    }
+
+
+
+
+    function imageSet(img, val, local) {
         if (local) {
             img.attr("src", "images/" + val + ".jpg");
         } else {
@@ -107,17 +101,27 @@ $(document).ready(function () {
         return img;
     }
 
+    function infoSet(id) {
+        try {
+            $('#' + id + 'info').html(info[$('#' + id + 'input').val()]["description"][language]);
+        } catch (err) {
+            console.log($('#' + id + 'input').val() + " either does not exist or does not have a translation for " + language);
+            $('#' + id + 'info').html("");
+        }
+    }
+
     function output() {
         $('#out').html("");
         var str = data[$('#hostinput').val()][$('#targetinput').val()];
         var link;
+        //NOTE: Adding to DOM every time. May be better to do strings instead?
         for (var i in str) {
             $('#out').append("<a href='http://plugable.com/products/" + str[i] + "' class='outlink' target='_top'></a>");
             link = $('.outlink:eq(' + i + ")");
             link.append("");
             link.append("<span class='outvar'>" + str[i] + "</span><br>");
             link.append("<img class='outimg' id='outimg" + i + "'>");
-            imageset($('#outimg' + i), str[i].toLowerCase(), false);
+            imageSet($('#outimg' + i), str[i].toLowerCase(), false);
         }
         $('#secondouttext').attr("style", "visibility:visible");
     }
