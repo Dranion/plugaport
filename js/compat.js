@@ -120,7 +120,11 @@ $(document).ready(function () {
     /* sets images */
     function imageSet(img, val, local) {
         if (local) {
-            img.attr("src", info[val]["image"]);
+            try {
+                img.attr("src", info[val]["image"]);
+            } catch (err) {
+                console.error("image for " + val + "had error: " + err);
+            }
         } else {
             img.attr("src", "http://plugable.com/images/" + val + "/main_256.jpg");
         }
