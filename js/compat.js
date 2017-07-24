@@ -43,6 +43,8 @@ $(document).ready(function () {
     function load() {
         var compaturl = "download/compatibility.json";
         var infourl = "download/information.json";
+
+        /* load actual data for options and results */
         data = $.getJSON(compaturl, function (data) {
             console.log('it was a scuess');
             var hosts = [];
@@ -59,6 +61,7 @@ $(document).ready(function () {
             loadError(jqxhr, textStatus, error, compaturl);
         });
 
+        /* load description and image information */
         info = $.getJSON(infourl);
         info.done(function () {
             info = info.responseJSON;
