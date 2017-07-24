@@ -6,7 +6,7 @@ $(document).ready(function () {
     localize();
     load();
 
-
+    /* gets languages based on the window's url. */
     function getLang() {
         var url = (window.location != window.parent.location) ?
             document.referrer :
@@ -19,6 +19,7 @@ $(document).ready(function () {
         }
     }
 
+    /* loads localized text for static, inserts based on id*/
     function localize() {
         var url = "js/local.json";
         local = $.getJSON(url).fail(function (jqxhr, textStatus, error) {
@@ -38,6 +39,7 @@ $(document).ready(function () {
         });
     }
 
+    /* loads the JSON for selection and description*/
     function load() {
         var compaturl = "download/compatibility.json";
         var infourl = "download/information.json";
@@ -66,6 +68,7 @@ $(document).ready(function () {
         });
     }
 
+    /* attempts to re-run download.php in case of JSON error */
     function loadError(jqxhr, textStatus, error, url) {
         var err = textStatus + ", " + error;
         console.error("Request Failed for " + url + " : " + err);
@@ -78,14 +81,14 @@ $(document).ready(function () {
             load();
         });
     }
-
+    /* sets up all listeners for user input */
     function listeners() {
         $('#hostinput').on('input', targetSet);
         $('#hostinput').on('click', clearAll);
         $('#targetinput').on('input', targetInput);
         $('#targetinput').on('click', clearTarget);
     }
-
+    /* sets the image and text for host, and then adds options for target */
     function targetSet() {
         var host = $('#hostinput').val();
         if (data.hasOwnProperty(host)) {
@@ -101,7 +104,7 @@ $(document).ready(function () {
             $('#target-connection').html(targets);
         }
     }
-
+    /* sets the image and text for target */
     function targetInput() {
         var host = $('#hostinput').val(),
             target = $('#targetinput').val();
@@ -111,10 +114,10 @@ $(document).ready(function () {
             output();
         }
     }
-
+    /* sets images */
     function imageSet(img, val, local) {
         if (local) {
-            img.attr("src", "images/" + val + ".jpg");
+            img.attr("src", info[val]["image"]);
         } else {
             img.attr("src", "http://plugable.com/images/" + val + "/main_256.jpg");
         }
@@ -128,6 +131,7 @@ $(document).ready(function () {
         return img;
     }
 
+    /* sets the information from information.json */
     function infoSet(id) {
         var infotext = $('#' + id + 'info');
         var val = $('#' + id + 'input').val();
@@ -144,6 +148,7 @@ $(document).ready(function () {
         }
     }
 
+    /* outputs results based on hostinput and targetinput */
     function output() {
         $('#out').html("");
         var str = data[$('#hostinput').val()][$('#targetinput').val()];
@@ -159,6 +164,8 @@ $(document).ready(function () {
         }
         $('#secondouttext').attr("style", "visibility:visible");
     }
+
+    /* Clear functions. Reset the areas that might have been modified */
 
     function clearAll() {
         $('#hostinfo').html("");
