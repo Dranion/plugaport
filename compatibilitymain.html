@@ -3,6 +3,10 @@
 
   <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+
+    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
     <script src="js/compat.js"></script>
 
     <title> Check Device Compatability</title>
@@ -16,25 +20,15 @@
 
 
 
-      <form id="form" class="selectors">
+      <div class="selectors">
         <div class="side" id="host"> <span id="hosttext"> </span> <br>
-          <input list="host-connection" id="hostinput" onload="fill()">
-          <datalist id="host-connection"></datalist>
-
-          <img id="hostimg" class="compatiblityimg" /><br>
-          <p id="hostinfo" class="info">
-          </p>
+          <ul id="host-connection"></ul>
         </div>
         <div class="side" id="target">
           <span id="targettext"></span> <br>
-
-          <input list="target-connection" id="targetinput">
-          <datalist id="target-connection"></datalist>
-
-          <img id="targetimg" class="compatiblityimg" />
-          <p id="targetinfo" class="info"></p>
+                  <ul id="target-connection"></ul>
         </div>
-      </form>
+      </div>
       <img src="http://www.clker.com/cliparts/X/p/4/d/1/h/green-arrow-down-hi.png" class="resultarrow" alt="results below">
       <br>
       <div class="results">

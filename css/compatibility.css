@@ -17,6 +17,33 @@
   font-size: 1.1em;
 }
 
+li.ui-selectee {
+  padding:5px;
+  border-top:0.5px #bbb solid;
+  margin:none;
+}
+
+li.ui-selectee:hover{
+  background:#ddd;
+}
+li.ui-selected {
+    background:#ccc;
+}
+.ui-selectable {
+  max-height:200px;
+  overflow-y:auto;
+  overflow-x:show;
+  list-style: none;
+  border:0.5px #bbb solid;
+  border-top:0px #bbb solid;
+  padding:0;
+  border-radius:10px;
+  text-align:left;
+  min-width:200px;
+  width:40%;
+  margin:0 auto;
+}
+
 input {
   width: 10%;
   min-width: 100px;
@@ -51,6 +78,11 @@ input {
   min-width: 100px;
   display: block;
   margin: 0 auto;
+}
+
+.selectimg {
+  margin-right:10%;
+  height:30px;
 }
 
 .info {

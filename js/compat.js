@@ -1,196 +1,223 @@
-$(document).ready(function () {
-    "use strict";
-    var data, language,
-        local, info, defaultLang = "en";
-    getLang();
-    localize();
-    load();
+$(document).ready(function() {
+  "use strict";
+  var data, language,
+    local, info, defaultLang = "en";
+  getLang();
+  localize();
+  load();
 
-    /* gets languages based on the window's url. */
-    function getLang() {
-        var url = (window.location != window.parent.location) ?
-            document.referrer :
-            document.location.href;
-        if (url.charAt(15) === "/") {
-            language = url.substr(13, 2);
+  /* gets languages based on the window's url. */
+  function getLang() {
+    var url = (window.location != window.parent.location) ?
+      document.referrer :
+      document.location.href;
+    if (url.charAt(15) === "/") {
+      language = url.substr(13, 2);
+    } else {
+      console.warn("defaulting on lang. url " + url + " not found to have language clue");
+      language = defaultLang;
+    }
+  }
+
+  /* loads localized text for static, inserts based on id*/
+  function localize() {
+    var url = "js/local.json";
+    local = $.getJSON(url).fail(function(jqxhr, textStatus, error) {
+      loadError(jqxhr, textStatus, error);
+    });
+    local.done(function() {
+      local = local.responseJSON;
+      var i;
+      for (i in local) {
+        if (local[i].hasOwnProperty(language)) {
+          $("#" + i).text(local[i][language]);
         } else {
-            console.warn("defaulting on lang. url " + url + " not found to have language clue");
-            language = defaultLang;
+          console.warn(i + " doesn't have language " + language);
+          $("#" + i).text(local[i][defaultLang]);
         }
-    }
+      }
+    });
+  }
 
-    /* loads localized text for static, inserts based on id*/
-    function localize() {
-        var url = "js/local.json";
-        local = $.getJSON(url).fail(function (jqxhr, textStatus, error) {
-            loadError(jqxhr, textStatus, error);
-        });
-        local.done(function () {
-            local = local.responseJSON;
-            var i;
-            for (i in local) {
-                if (local[i].hasOwnProperty(language)) {
-                    $("#" + i).text(local[i][language]);
-                } else {
-                    console.warn(i + " doesn't have language " + language);
-                    $("#" + i).text(local[i][defaultLang]);
-                }
-            }
-        });
-    }
+  /* loads the JSON for selection and description*/
+  function load() {
+    var infourl = "download/information.json";
+    info = $.getJSON(infourl);
+    info.done(function() {
+      info = JSON.parse(info.responseText);
+      dataLoad()
+    });
+    info.fail(function(jqxhr, textStatus, error) {
+      loadError(jqxhr, textStatus, error, infourl);
+    });
 
-    /* loads the JSON for selection and description*/
-    function load() {
-        var compaturl = "download/compatibility.json";
-        var infourl = "download/information.json";
+  }
 
-        /* load actual data for options and results */
-        data = $.getJSON(compaturl, function (data) {
-            console.log('it was a scuess');
-            var hosts = [];
-            $.each(data, function (key) {
-                hosts.push('<option value = "' + key + '"/>');
-            });
-            $('#host-connection').html(hosts.join(""));
-            listeners();
-        });
-        data.done(function () {
-            data = data.responseJSON;
-        });
-        data.fail(function (jqxhr, textStatus, error) {
-            loadError(jqxhr, textStatus, error, compaturl);
-        });
-
-        /* load description and image information */
-        info = $.getJSON(infourl);
-        info.done(function () {
-            info = info.responseJSON;
-        });
-        info.fail(function (jqxhr, textStatus, error) {
-            loadError(jqxhr, textStatus, error, infourl);
-        });
-    }
-
-    /* attempts to re-run download.php in case of JSON error */
-    function loadError(jqxhr, textStatus, error, url) {
-        var err = textStatus + ", " + error;
-        console.error("Request Failed for " + url + " : " + err);
-
-        var php = $.get("download.php", function (data) {
-            console.log("attempting to download.... ");
-        });
-        php.done(function () {
-            console.log("download complete");
-            load();
-        });
-    }
-    /* sets up all listeners for user input */
-    function listeners() {
-        $('#hostinput').on('input', targetSet);
-        $('#hostinput').on('click', clearAll);
-        $('#targetinput').on('input', targetInput);
-        $('#targetinput').on('click', clearTarget);
-    }
-    /* sets the image and text for host, and then adds options for target */
-    function targetSet() {
-        var host = $('#hostinput').val();
-        if (data.hasOwnProperty(host)) {
-            imageSet($('#hostimg'), $('#hostinput').val(), true);
-            infoSet("host");
-            $('#target-connection').val("");
-            var targets = "";
-            for (var i in data[host]) {
-                if (data[host].hasOwnProperty(i)) {
-                    targets += '<option value = "' + i.replace('"', '&#34;') + '"/>';
-                }
-            }
-            $('#target-connection').html(targets);
+  function dataLoad() {
+    var compaturl = "download/compatibility.json";
+    data = $.getJSON(compaturl, function(data) {
+      console.log('it was a scuess');
+      var hosts = [];
+      $.each(data, function(key) {
+        var str = '<li>'
+        if (info[key]['image'] != "") {
+          str += '<img src="' + info[key]['image'] + '" class="selectimg">'
         }
-    }
-    /* sets the image and text for target */
-    function targetInput() {
-        var host = $('#hostinput').val(),
-            target = $('#targetinput').val();
-        if (data[host].hasOwnProperty(target)) {
-            imageSet($('#targetimg'), target, true);
-            infoSet("target");
-            output();
+        str += key;
+
+        str += '</li>'
+        hosts.push(str);
+      });
+      $('#host-connection').html(hosts.join(""));
+      listeners();
+    });
+    data.done(function() {
+      data = JSON.parse(data.responseText);
+    });
+    data.fail(function(jqxhr, textStatus, error) {
+      loadError(jqxhr, textStatus, error, compaturl);
+    });
+
+  }
+
+  /* attempts to re-run download.php in case of JSON error */
+  function loadError(jqxhr, textStatus, error, url) {
+    var err = textStatus + ", " + error;
+    console.error("Request Failed for " + url + " : " + err);
+
+    var php = $.get("download.php", function(data) {
+      console.log("attempting to download.... ");
+    });
+    php.done(function() {
+      console.log("download complete");
+      load();
+    });
+  }
+  /* sets up all listeners for user input */
+  function listeners() {
+    console.log("listeners");
+    $('#host-connection').selectable({
+      selected: function(event, ui) {
+        $(ui.selected).addClass("ui-selected").siblings().removeClass("ui-selected");
+        targetSet(event, ui)
+      }
+    });
+    $('#target-connection').selectable({
+      selected: function(event, ui) {
+        $(ui.selected).addClass("ui-selected").siblings().removeClass("ui-selected");
+        output(event, ui)
+      }
+    });
+
+  }
+  /* sets the image and text for host, and then adds options for target */
+  function targetSet(event, ui) {
+    var hostAll = $('#host-connection .ui-selected').map(function() {
+      return $(this).text();
+    }).get();
+    var len = hostAll.length;
+    var targets = "";
+    for (var i = 0; i < len; i++) {
+      var host = hostAll[i];
+      if (data.hasOwnProperty(host)) {
+        for (var i in data[host]) {
+          if (data[host].hasOwnProperty(i)) {
+            targets += '<li class=".ui-selectee">' + i.replace('"', '&#34;') + '</li>';
+          }
         }
-    }
-    /* sets images */
-    function imageSet(img, val, local) {
-        if (local) {
-            try {
-                img.attr("src", info[val]["image"]);
-            } catch (err) {
-                console.error("image for " + val + "had error: " + err);
-            }
-        } else {
-            img.attr("src", "http://plugable.com/images/" + val + "/main_256.jpg");
-        }
-        img.attr("alt", "image of " + val);
-        img.on('error', function () {
-            this.style.visibility = 'hidden';
-        });
-        img.on('load', function () {
-            this.style.visibility = 'visible';
-        });
-        return img;
+      }
+
     }
 
-    /* sets the information from information.json */
-    function infoSet(id) {
-        var infotext = $('#' + id + 'info');
-        var val = $('#' + id + 'input').val();
-        if (info.hasOwnProperty(val)) {
-            if (info[val]["description"].hasOwnProperty(language)) {
-                infotext.html(info[val]["description"][language]);
-            } else {
-                console.warn(val + " has no translation for " + language + ". Defaulting to " + defaultLang);
-                infotext.html(info[val]["description"][defaultLang]);
-            }
-        } else {
-            console.warn(val + " has no listed description");
-            infotext.html("");
-        }
-    }
+    $('#target-connection').html(targets);
+    $("#target-connection").selectable("refresh");
 
-    /* outputs results based on hostinput and targetinput */
-    function output() {
-        $('#out').html("");
-        var str = data[$('#hostinput').val()][$('#targetinput').val()];
-        var link;
-        //NOTE: Adding to DOM every time. May be better t do strings instead?
-        for (var i in str) {
-            $('#out').append("<a href='http://plugable.com/" + language + "/products/" + str[i] + "' class='outlink' target='_top'></a>");
-            link = $('.outlink:eq(' + i + ")");
-            link.append("");
-            link.append("<span class='outvar'>" + str[i] + "</span><br>");
-            link.append("<img class='outimg' id='outimg" + i + "'>");
-            imageSet($('#outimg' + i), str[i].toLowerCase(), false);
-        }
-        $('#secondouttext').attr("style", "visibility:visible");
+  }
+  /* sets images */
+  function imageSet(img, val, local) {
+    if (local) {
+      try {
+        img.attr("src", info[val]["image"]);
+      } catch (err) {
+        console.error("image for " + val + "had error: " + err);
+      }
+    } else {
+      img.attr("src", "http://plugable.com/images/" + val + "/main_256.jpg");
     }
+    img.attr("alt", "image of " + val);
+    img.on('error', function() {
+      this.style.visibility = 'hidden';
+    });
+    img.on('load', function() {
+      this.style.visibility = 'visible';
+    });
+    return img;
+  }
 
-    /* Clear functions. Reset the areas that might have been modified */
-
-    function clearAll() {
-        $('#hostinfo').html("");
-        $('#hostinput').val("");
-        $('#hostimg').attr("src", "");
-        clearTarget();
+  /* sets the information from information.json */
+  function infoSet(id) {
+    var infotext = $('#' + id + 'info');
+    var val = $('#' + id + 'input').val();
+    if (info.hasOwnProperty(val)) {
+      if (info[val]["description"].hasOwnProperty(language)) {
+        infotext.html(info[val]["description"][language]);
+      } else {
+        console.warn(val + " has no translation for " + language + ". Defaulting to " + defaultLang);
+        infotext.html(info[val]["description"][defaultLang]);
+      }
+    } else {
+      console.warn(val + " has no listed description");
+      infotext.html("");
     }
+  }
 
-    function clearResults() {
-        $('#secondouttext').attr("style", "visibility:'hidden'");
-        $('#out').html("");
-    }
+  /* outputs results based on hostinput and targetinput */
+  function output(event, ui) {
+    $('#out').html("");
 
-    function clearTarget() {
-        $('#targetimg').attr("src", "");
-        $('#targetinput').html("");
-        $('#targetinput').val("");
-        $('#targetinfo').html("");
-        clearResults();
+    var host = $('#host-connection .ui-selected').map(function() {
+      return $(this).text();
+    }).get();
+    console.log("HOST");
+    console.log(host)
+    var target = $('#target-connection .ui-selected').map(function() {
+      return $(this).text();
+    }).get();
+    console.log("TARGET");
+    console.log(target)
+    var str = data[host][target];
+    var link;
+    //NOTE: Adding to DOM every time. May be better t do strings instead?
+    for (var i in str) {
+      $('#out').append("<a href='http://plugable.com/" + language + "/products/" + str[i] + "' class='outlink' target='_top'></a>");
+      link = $('.outlink:eq(' + i + ")");
+      link.append("");
+      link.append("<span class='outvar'>" + str[i] + "</span><br>");
+      link.append("<img class='outimg' id='outimg" + i + "'>");
+      imageSet($('#outimg' + i), str[i].toLowerCase(), false);
     }
+    $('#secondouttext').attr("style", "visibility:visible");
+  }
+
+  /* Clear functions. Reset the areas that might have been modified */
+
+  function clearAll() {
+    $('#hostinfo').html("");
+    $('#host-connection').val("");
+    $('#hostimg').attr("src", "");
+    clearTarget();
+  }
+
+  function clearResults() {
+    $('#secondouttext').attr("style", "visibility:'hidden'");
+    $('#out').html("");
+  }
+
+  function clearTarget() {
+    $('#targetimg').attr("src", "");
+    $('#target-connection').html("");
+    $('#target-connection').val("");
+    $('#targetinfo').html("");
+    clearResults();
+  }
 });
