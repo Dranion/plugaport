@@ -1,12 +1,10 @@
 .connectorform {
   margin: 0 auto;
-  /* position the top  edge of the element at the middle of the parent */
   left: 50%;
-  /* position the left edge of the element at the middle of the parent */
   transform: translate(-50%, 0);
   position: absolute;
   text-align: center;
-  font-size: calc(14px + .5vmin);
+  font-size: calc(14px + 0.5vmin);
   width: 100%;
   padding: 6px;
   overflow: hidden;
@@ -18,30 +16,32 @@
 }
 
 li.ui-selectee {
-  padding:5px;
-  border-top:0.5px #bbb solid;
-  margin:none;
+  padding: 5px;
+  border-top: 0.5px #bbb solid;
+  margin: none;
 }
 
-li.ui-selectee:hover{
-  background:#ddd;
+li.ui-selectee:hover {
+  background: #ddd;
 }
+
 li.ui-selected {
-    background:#ccc;
+  background: #ccc;
 }
+
 .ui-selectable {
-  max-height:200px;
-  overflow-y:auto;
-  overflow-x:show;
+  max-height: 200px;
+  overflow-y: auto;
+  overflow-x: show;
   list-style: none;
-  border:0.5px #bbb solid;
-  border-top:0px #bbb solid;
-  padding:0;
-  border-radius:10px;
-  text-align:left;
-  min-width:200px;
-  width:40%;
-  margin:0 auto;
+  border: 0.5px #bbb solid;
+  border-top: 0 #bbb solid;
+  padding: 0;
+  border-radius: 10px;
+  text-align: left;
+  min-width: 200px;
+  width: 40%;
+  margin: 0 auto;
 }
 
 input {
@@ -49,7 +49,7 @@ input {
   min-width: 100px;
   min-height: 14px;
   max-height: 20px;
-  font-size: calc(10px + .8vmin);
+  font-size: calc(10px + 0.8vmin);
   height: 3vh;
 }
 
@@ -81,8 +81,8 @@ input {
 }
 
 .selectimg {
-  margin-right:10%;
-  height:30px;
+  margin-right: 10%;
+  height: 30px;
 }
 
 .info {
@@ -100,6 +100,10 @@ input {
 .plugimg {
   height: auto;
   max-height: 200px;
+}
+
+.ui-selectable-helper {
+  display: none;
 }
 
 #out {

@@ -1,7 +1,10 @@
 $(document).ready(function() {
   "use strict";
   var data, language,
-    local, info, defaultLang = "en";
+    local, info,
+    compfail = 0,
+    infofail = 0,
+    defaultLang = "en";
   getLang();
   localize();
   load();
@@ -48,7 +51,14 @@ $(document).ready(function() {
       dataLoad()
     });
     info.fail(function(jqxhr, textStatus, error) {
-      loadError(jqxhr, textStatus, error, infourl);
+      if (infofail < 2) {
+        console.log("infofail" + infofail);
+        loadError(jqxhr, textStatus, error, infourl);
+        infofail += 1;
+      } else {
+        $('body').html("Load failed - no JSON found")
+        console.error("Total fail. Cannot load.")
+      }
     });
 
   }
@@ -59,14 +69,7 @@ $(document).ready(function() {
       console.log('it was a scuess');
       var hosts = [];
       $.each(data, function(key) {
-        var str = '<li>'
-        if (info[key]['image'] != "") {
-          str += '<img src="' + info[key]['image'] + '" class="selectimg">'
-        }
-        str += key;
-
-        str += '</li>'
-        hosts.push(str);
+        hosts.push(createLi(key));
       });
       $('#host-connection').html(hosts.join(""));
       listeners();
@@ -75,9 +78,29 @@ $(document).ready(function() {
       data = JSON.parse(data.responseText);
     });
     data.fail(function(jqxhr, textStatus, error) {
-      loadError(jqxhr, textStatus, error, compaturl);
+      if (compfail < 1) {
+        console.log("compfail " + compfail)
+        loadError(jqxhr, textStatus, error, compaturl);
+        compfail += 1;
+      } else {
+        $('body').html("Load failed - no JSON found")
+        console.error("Total fail. Cannot load.")
+      }
     });
 
+  }
+
+  function createLi(key) {
+
+    var str = '<li>'
+    if (info[key]['image'] != "") {
+      str += '<img src="' + info[key]['image'] + '" class="selectimg">'
+    }
+    key = key.replace('"', '&#34;')
+    str += key;
+
+    str += '</li>'
+    return str;
   }
 
   /* attempts to re-run download.php in case of JSON error */
@@ -122,7 +145,7 @@ $(document).ready(function() {
       if (data.hasOwnProperty(host)) {
         for (var i in data[host]) {
           if (data[host].hasOwnProperty(i)) {
-            targets += '<li class=".ui-selectee">' + i.replace('"', '&#34;') + '</li>';
+            targets += createLi(i);
           }
         }
       }
