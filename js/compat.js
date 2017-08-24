@@ -151,7 +151,7 @@ $(document).ready(function() {
       }
 
     }
-
+    $('#out').html("");
     $('#target-connection').html(targets);
     $("#target-connection").selectable("refresh");
 
