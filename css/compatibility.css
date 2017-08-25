@@ -121,6 +121,11 @@ input {
   width: 100%;
 }
 
+.info {
+  font-size: 0.5em;
+  color: blue;
+}
+
 .resultarrow {
   height: 3vh;
   min-height: 75px;

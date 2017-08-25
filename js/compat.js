@@ -90,18 +90,32 @@ $(document).ready(function() {
 
   }
 
-  function createLi(key) {
 
+
+  function createLi(key) {
+    console.log("Create LI" + key);
     var str = '<li>'
     if (info[key]['image'] != "") {
       str += '<img src="' + info[key]['image'] + '" class="selectimg">'
     }
     key = key.replace('"', '&#34;')
     str += key;
-
+    if (info[key]['description'][language] != "") {
+      console.log("HEY")
+      var quickkey = key.replace(" ", "_")
+      str += '<span class="info" title="Click for more info" name="' + quickkey + '"> <i class="fa fa-info-circle" aria-hidden="true"></i>'
+      if (key == "Thunderbolt 3" || key == "USB 3") {
+        str += "Read this"
+      } else {
+        str += "More info"
+      }
+      str += "</span>"
+      str += '<div class="dialog" title="' + key + ' Info" id="' + quickkey + '">' + info[key]['description'][language] + '</div>'
+    }
     str += '</li>'
     return str;
   }
+
 
   /* attempts to re-run download.php in case of JSON error */
   function loadError(jqxhr, textStatus, error, url) {
@@ -116,6 +130,7 @@ $(document).ready(function() {
       load();
     });
   }
+
   /* sets up all listeners for user input */
   function listeners() {
     console.log("listeners");
@@ -131,8 +146,16 @@ $(document).ready(function() {
         output(event, ui)
       }
     });
-
+    $('.dialog').dialog({
+      draggable: false,
+      modal: true,
+      autoOpen: false
+    });
+    $('.info').on("click", function(e) {
+      showDescription($(this).attr("name"))
+    })
   }
+
   /* sets the image and text for host, and then adds options for target */
   function targetSet(event, ui) {
     var hostAll = $('#host-connection .ui-selected').map(function() {
@@ -149,49 +172,11 @@ $(document).ready(function() {
           }
         }
       }
-
     }
     $('#out').html("");
     $('#target-connection').html(targets);
     $("#target-connection").selectable("refresh");
 
-  }
-  /* sets images */
-  function imageSet(img, val, local) {
-    if (local) {
-      try {
-        img.attr("src", info[val]["image"]);
-      } catch (err) {
-        console.error("image for " + val + "had error: " + err);
-      }
-    } else {
-      img.attr("src", "http://plugable.com/images/" + val + "/main_256.jpg");
-    }
-    img.attr("alt", "image of " + val);
-    img.on('error', function() {
-      this.style.visibility = 'hidden';
-    });
-    img.on('load', function() {
-      this.style.visibility = 'visible';
-    });
-    return img;
-  }
-
-  /* sets the information from information.json */
-  function infoSet(id) {
-    var infotext = $('#' + id + 'info');
-    var val = $('#' + id + 'input').val();
-    if (info.hasOwnProperty(val)) {
-      if (info[val]["description"].hasOwnProperty(language)) {
-        infotext.html(info[val]["description"][language]);
-      } else {
-        console.warn(val + " has no translation for " + language + ". Defaulting to " + defaultLang);
-        infotext.html(info[val]["description"][defaultLang]);
-      }
-    } else {
-      console.warn(val + " has no listed description");
-      infotext.html("");
-    }
   }
 
   /* outputs results based on hostinput and targetinput */
@@ -236,11 +221,8 @@ $(document).ready(function() {
     $('#out').html("");
   }
 
-  function clearTarget() {
-    $('#targetimg').attr("src", "");
-    $('#target-connection').html("");
-    $('#target-connection').val("");
-    $('#targetinfo').html("");
-    clearResults();
+
+  function showDescription(id) {
+    $('#' + id).dialog("open");
   }
 });
