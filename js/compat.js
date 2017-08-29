@@ -48,6 +48,8 @@ $(document).ready(function() {
     info = $.getJSON(infourl);
     info.done(function() {
       info = JSON.parse(info.responseText);
+      console.log("INFO")
+      console.log(info)
       dataLoad()
     });
     info.fail(function(jqxhr, textStatus, error) {
@@ -94,7 +96,7 @@ $(document).ready(function() {
 
   function createLi(key) {
     var str = '<li>'
-    if (info[key]['image'] != "") {
+    if (info[key]['image']) {
       str += '<img src="' + info[key]['image'] + '" class="selectimg">'
     }
     str += key;
@@ -134,18 +136,23 @@ $(document).ready(function() {
   }
 
   function setInfo(div, key) {
-    $('#' + div).find('.select').attr("style", "display:none")
-    var inform = $('#' + div).find('.information')
-    inform.html("")
-    inform.attr("style", "display:inherit;")
-    inform.append('<p>' + info[key]['description'][language] + '</p>')
-    inform.append('<br><button type="button" class="hideinfo">Okay</button>')
-    $('.hideinfo').on('click', function(e) {
-      console.log("click")
-      e.stopPropagation();
-      $(this).parent().hide();
-      $(this).parent().prev().show();
-    })
+    var text = info[key]['description'][language]
+    if (text != "") {
+      $('#' + div).find('.select').attr("style", "display:none")
+      var inform = $('#' + div).find('.information')
+      inform.html("")
+      inform.attr("style", "display:inherit;")
+      inform.append('<p>' + text + '</p>')
+      inform.append('<br><button type="button" class="hideinfo">Okay</button>')
+      $('.hideinfo').on('click', function(e) {
+        console.log("click")
+        e.stopPropagation();
+        $(this).parent().hide();
+        $(this).parent().prev().show();
+      })
+    }
+
+
   }
 
 
