@@ -93,29 +93,14 @@ $(document).ready(function() {
 
 
   function createLi(key) {
-    console.log("Create LI" + key);
     var str = '<li>'
     if (info[key]['image'] != "") {
       str += '<img src="' + info[key]['image'] + '" class="selectimg">'
     }
-    key = key.replace('"', '&#34;')
     str += key;
-    if (info[key]['description'][language] != "") {
-      console.log("HEY")
-      var quickkey = key.replace(" ", "_")
-      str += '<span class="info" title="Click for more info" name="' + quickkey + '"> <i class="fa fa-info-circle" aria-hidden="true"></i>'
-      if (key == "Thunderbolt 3" || key == "USB 3") {
-        str += "Read this"
-      } else {
-        str += "More info"
-      }
-      str += "</span>"
-      str += '<div class="dialog" title="' + key + ' Info" id="' + quickkey + '">' + info[key]['description'][language] + '</div>'
-    }
     str += '</li>'
     return str;
   }
-
 
   /* attempts to re-run download.php in case of JSON error */
   function loadError(jqxhr, textStatus, error, url) {
@@ -142,19 +127,27 @@ $(document).ready(function() {
     });
     $('#target-connection').selectable({
       selected: function(event, ui) {
-        $(ui.selected).addClass("ui-selected").siblings().removeClass("ui-selected");
+        $(ui.selected).addClass("ui-selected").siblings().removeClass("ui-selected")
         output(event, ui)
       }
     });
-    $('.dialog').dialog({
-      draggable: false,
-      modal: true,
-      autoOpen: false
-    });
-    $('.info').on("click", function(e) {
-      showDescription($(this).attr("name"))
+  }
+
+  function setInfo(div, key) {
+    $('#' + div).find('.select').attr("style", "display:none")
+    var inform = $('#' + div).find('.information')
+    inform.html("")
+    inform.attr("style", "display:inherit;")
+    inform.append('<p>' + info[key]['description'][language] + '</p>')
+    inform.append('<br><button type="button" class="hideinfo">Okay</button>')
+    $('.hideinfo').on('click', function(e) {
+      console.log("click")
+      e.stopPropagation();
+      $(this).parent().hide();
+      $(this).parent().prev().show();
     })
   }
+
 
   /* sets the image and text for host, and then adds options for target */
   function targetSet(event, ui) {
@@ -165,6 +158,7 @@ $(document).ready(function() {
     var targets = "";
     for (var i = 0; i < len; i++) {
       var host = hostAll[i];
+      setInfo('target', host)
       if (data.hasOwnProperty(host)) {
         for (var i in data[host]) {
           if (data[host].hasOwnProperty(i)) {
@@ -179,6 +173,25 @@ $(document).ready(function() {
 
   }
 
+  function imageSet(img, val, local) {
+    if (local) {
+      try {
+        img.attr("src", info[val]["image"]);
+      } catch (err) {
+        console.error("image for " + val + "had error: " + err);
+      }
+    } else {
+      img.attr("src", "http://plugable.com/images/" + val + "/main_256.jpg");
+    }
+    img.attr("alt", "image of " + val);
+    img.on('error', function() {
+      this.style.visibility = 'hidden';
+    });
+    img.on('load', function() {
+      this.style.visibility = 'visible';
+    });
+    return img;
+  }
   /* outputs results based on hostinput and targetinput */
   function output(event, ui) {
     $('#out').html("");
@@ -193,18 +206,24 @@ $(document).ready(function() {
     }).get();
     console.log("TARGET");
     console.log(target)
+    setInfo('host', target)
     var str = data[host][target];
-    var link;
     //NOTE: Adding to DOM every time. May be better t do strings instead?
     for (var i in str) {
-      $('#out').append("<a href='http://plugable.com/" + language + "/products/" + str[i] + "' class='outlink' target='_top'></a>");
-      link = $('.outlink:eq(' + i + ")");
-      link.append("");
-      link.append("<span class='outvar'>" + str[i] + "</span><br>");
-      link.append("<img class='outimg' id='outimg" + i + "'>");
-      imageSet($('#outimg' + i), str[i].toLowerCase(), false);
+      addSolution(i, str);
     }
     $('#secondouttext').attr("style", "visibility:visible");
+  }
+
+  function addSolution(i, str) {
+    $('#out').append("<div class='result'><a href='http://plugable.com/" + language + "/products/" + str[i] + "' class='outlink' target='_top'></a></div>");
+    var link = $('.outlink:eq(' + i + ")");
+    link.append("");
+    link.append("<span class='outvar'>" + str[i] + "</span><br>");
+    link.append("<img class='outimg' id='outimg" + i + "'>");
+    link.parent().append('<p id="secondouttext" class="outtext">' + info[str[i]]['description'][language] + ' </p>')
+    imageSet($('#outimg' + i), str[i].toLowerCase(), false);
+
   }
 
   /* Clear functions. Reset the areas that might have been modified */
@@ -223,6 +242,7 @@ $(document).ready(function() {
 
 
   function showDescription(id) {
+    console.log("description")
     $('#' + id).dialog("open");
   }
 });

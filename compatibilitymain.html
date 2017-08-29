@@ -1,43 +1,49 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-  <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="js/compat.js"></script>
 
-  <script src="js/compat.js"></script>
+    <title> Check Device Compatability</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/compatibility.css">
+  </head>
 
-  <title> Check Device Compatability</title>
-  <link rel="stylesheet" href="css/main.css">
-  <link rel="stylesheet" href="css/compatibility.css">
-</head>
+  <body>
 
-<body>
-
-  <div class="connectorform">
-
+    <div class="connectorform">
 
 
-    <div class="selectors">
-      <div class="side" id="host"> <span id="hosttext"> </span> <br>
-        <ul id="host-connection"></ul>
+
+      <div class="selectors">
+        <div class="side" id="host">
+          <div class="select">
+            <span id="hosttext"> </span> <br>
+            <ul id="host-connection"></ul>
+          </div>
+          <div class="information">
+          </div>
+        </div>
+        <div class="side" id="target">
+          <div class="select">
+            <span id="targettext"> </span> <br>
+            <ul id="target-connection"></ul>
+          </div>
+          <div class="information">
+          </div>
+        </div>
       </div>
-      <div class="side" id="target">
-        <span id="targettext"></span> <br>
-        <ul id="target-connection"></ul>
+      <br>
+      <div class="results">
+        <h3 id="firstouttext"> </h3>
+        <div id="out">
+        </div>
       </div>
     </div>
-    <img src="http://www.clker.com/cliparts/X/p/4/d/1/h/green-arrow-down-hi.png" class="resultarrow" alt="results below">
-    <br>
-    <div class="results">
-      <h3 id="firstouttext"> </h3>
-      <div id="out">
-      </div>
-      <p id="secondouttext" class="outtext"> </p>
-    </div>
-  </div>
-</body>
+  </body>
 
 </html>

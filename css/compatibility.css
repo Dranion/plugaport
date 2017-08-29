@@ -30,18 +30,37 @@ li.ui-selected {
 }
 
 .ui-selectable {
+  border-top: 0 #bbb solid;
+  list-style: none;
+  text-align: left;
+}
+
+.ui-selectable,
+.result,
+.information {
+  width: 60%;
   max-height: 200px;
   overflow-y: auto;
   overflow-x: show;
-  list-style: none;
   border: 0.5px #bbb solid;
-  border-top: 0 #bbb solid;
   padding: 0;
   border-radius: 10px;
-  text-align: left;
   min-width: 200px;
-  width: 40%;
   margin: 0 auto;
+}
+
+.result {
+  width: 30%;
+  max-width: 200px;
+  margin: auto;
+  justify-content: space-around;
+  max-height: none;
+  padding: 20px;
+}
+
+.outimg {
+  max-width: 100%;
+  max-height: 200px;
 }
 
 input {
@@ -82,7 +101,7 @@ input {
 
 .selectimg {
   margin-right: 10%;
-  height: 30px;
+  width: 15%;
 }
 
 .info {
@@ -109,6 +128,7 @@ input {
 #out {
   margin: 0 auto;
   text-align: center;
+  display: flex;
 }
 
 .outtext {
@@ -121,9 +141,19 @@ input {
   width: 100%;
 }
 
-.info {
+div.info {
   font-size: 0.5em;
   color: blue;
+  margin-left: 10px;
+}
+
+.info {
+  display: inline;
+}
+
+.dialog.ui-selectee {
+  display: none;
+  font-size: 0.6em;
 }
 
 .resultarrow {
