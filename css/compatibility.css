@@ -1,66 +1,151 @@
+body {
+  font-family: sans-serif;
+}
+
 .connectorform {
-  margin: 0 auto;
-  left: 50%;
-  transform: translate(-50%, 0);
-  position: absolute;
   text-align: center;
-  font-size: calc(14px + 0.5vmin);
-  width: 100%;
-  padding: 6px;
-  overflow: hidden;
+  margin: 10%;
+  margin-top: 10px;
 }
 
 #firstouttext {
   font-weight: normal;
   font-size: 1.1em;
+  background-color: green;
+  width: 100%;
+  color: white;
+  margin-bottom: 0;
 }
 
 li.ui-selectee {
   padding: 5px;
-  border-top: 0.5px #bbb solid;
-  margin: none;
+  margin: 0;
+  height: 60px;
+  vertical-align: middle;
+}
+
+.minimize li.ui-selectee {
+  display: none;
+}
+
+.minimize li.ui-selected {
+  display: inherit;
 }
 
 li.ui-selectee:hover {
   background: #ddd;
 }
 
-li.ui-selected {
-  background: #ccc;
+#firstouttext {
+  margin: 0;
 }
 
 .ui-selectable {
-  border-top: 0 #bbb solid;
   list-style: none;
-  text-align: left;
-}
-
-.ui-selectable,
-.result,
-.information {
-  width: 60%;
-  max-height: 200px;
+  width: 100%;
+  height: 75%;
+  text-align: center;
   overflow-y: auto;
   overflow-x: show;
-  border: 0.5px #bbb solid;
+  background-color: #7b7c7c;
+  color: white;
   padding: 0;
-  border-radius: 10px;
-  min-width: 200px;
-  margin: 0 auto;
+  margin: 0;
 }
 
-.result {
-  width: 30%;
-  max-width: 200px;
-  margin: auto;
-  justify-content: space-around;
-  max-height: none;
-  padding: 20px;
+.ui-selectable.minimize {
+  height: auto;
+}
+
+.side {
+  flex: 2 1 30%;
+  min-width: 130px;
+  max-height: 40vh;
+  margin-bottom: 10px;
+}
+
+.plus {
+  font-size: 10vw;
+  font-weight: bolder;
+  color: green;
+  flex: 0 2;
+  height: 10vw;
+}
+
+.connect {
+  font-size: 1.5em;
+  background-color: green;
+  min-height: 50px;
+  overflow: none;
+  height: 10%;
+  vertical-align: middle;
 }
 
 .outimg {
-  max-width: 100%;
-  max-height: 200px;
+  mix-blend-mode: multiply;
+  -webkit-filter: contrast(150%);
+}
+
+.text {
+  margin: 0;
+  color: white;
+  width: 100%;
+  padding: 10px 0px;
+}
+
+.step {
+  height: 5%;
+  vertical-align: middle;
+  background-color: #7b7c7c;
+  font-weight: normal;
+  font-size: 1.1em;
+}
+
+#out {
+  background-color: #7b7c7c;
+}
+
+.result {
+  width: 100%;
+  background-color: #7b7c7c;
+  color: white;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  margin: 0;
+}
+
+.slidearrow {
+  height: 100%;
+  margin: 0;
+  background: #7b7c7c;
+  vertical-align: middle;
+  display: inline-block;
+  border: none;
+  position: relative;
+  outline: 0;
+  padding: 8px;
+  color: green;
+  font-weight: bolder;
+  font-size: 4vw;
+}
+
+#slideback {
+  display: left;
+}
+
+#slideforward {
+  display: right;
+}
+
+.resleft {
+  width: 49%;
+  float: left;
+}
+
+.resright {
+  width: 40%;
+  float: right;
 }
 
 input {
@@ -72,23 +157,17 @@ input {
   height: 3vh;
 }
 
-#host {
-  float: left;
-}
-
-#target {
-  float: right;
-}
-
-.side {
-  width: 49%;
-  margin-left: 1%;
+.select {
+  flex: 1 1 auto;
 }
 
 .selectors {
-  overflow: hidden;
-  display: block;
   margin-bottom: 0;
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  height: 30%;
 }
 
 .compatiblityimg {
@@ -100,8 +179,9 @@ input {
 }
 
 .selectimg {
-  margin-right: 10%;
-  width: 15%;
+  margin: 0 auto;
+  display: block;
+  height: 30px;
 }
 
 .info {
@@ -126,9 +206,19 @@ input {
 }
 
 #out {
+  margin-top: 0;
   margin: 0 auto;
   text-align: center;
   display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.clear {
+  color: green;
+  text-align: right;
+  float: right;
+  font-size: 0.8em;
 }
 
 .outtext {
@@ -139,6 +229,9 @@ input {
 .results {
   display: block;
   width: 100%;
+  margin: 0;
+  padding: 0;
+  height: auto;
 }
 
 div.info {
@@ -147,20 +240,40 @@ div.info {
   margin-left: 10px;
 }
 
+.bighelp {
+  margin: 0;
+  margin-top: 30px;
+}
+
 .info {
   display: inline;
 }
 
-.dialog.ui-selectee {
-  display: none;
-  font-size: 0.6em;
+.green {
+  color: green;
 }
 
-.resultarrow {
-  height: 3vh;
-  min-height: 75px;
-  min-width: 25px;
-  width: 5vw;
-  position: relative;
-  margin-top: -3vh;
+.grey {
+  color: gray;
+}
+
+.big {
+  font-size: 1.5em;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.small {
+  font-size: 1em;
+}
+
+.button {
+  text-decoration: none !important;
+  background: green;
+  color: white;
+  font-size: 1.3em;
+  padding: 10px;
+  border-radius: 20px;
+  margin: 10px;
 }

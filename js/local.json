@@ -1,23 +1,18 @@
 {
 
   "hosttext": {
-    "en": "Trying to connect....",
+    "en": "Trying to connect",
     "ja": "から",
     "es": "Tratando de conectar"
   },
   "targettext": {
-    "en": "with.....",
+    "en": "with",
     "ja": "まで",
     "es": "con..."
   },
   "firstouttext": {
-    "en": "We can (probably) do that!",
+    "en": "You will need",
     "ja": "（多分）出来る！",
     "es": "problamente puede hacer"
-  },
-  "secondouttext": {
-    "en": "Please check the system requirements for these products before purchasing. Certain systems don't work together, despite the presence of compatible physical connectors.",
-    "ja": "言葉が知りません。ごめんなさい。",
-    "es": "Por favor leer los sistemos"
   }
 }

@@ -4,7 +4,8 @@ $(document).ready(function() {
     local, info,
     compfail = 0,
     infofail = 0,
-    defaultLang = "en";
+    defaultLang = "en",
+    slideIndex = 1;
   getLang();
   localize();
   load();
@@ -68,12 +69,25 @@ $(document).ready(function() {
   function dataLoad() {
     var compaturl = "download/compatibility.json";
     data = $.getJSON(compaturl, function(data) {
-      console.log('it was a scuess');
+
       var hosts = [];
+      console.log("DATA")
+      console.log(data)
       $.each(data, function(key) {
         hosts.push(createLi(key));
       });
       $('#host-connection').html(hosts.join(""));
+
+      // Looks better with something already here, so load with USB-C just in case.
+      var targets = []
+      $.each(data['USB-C'], function(key) {
+        targets.push(createLi(key));
+      })
+      console.log(targets);
+
+      $('#target-connection').html(targets.join(""));
+
+
       listeners();
     });
     data.done(function() {
@@ -96,10 +110,11 @@ $(document).ready(function() {
 
   function createLi(key) {
     var str = '<li>'
+    str += key;
     if (info[key]['image']) {
       str += '<img src="' + info[key]['image'] + '" class="selectimg">'
     }
-    str += key;
+
     str += '</li>'
     return str;
   }
@@ -120,7 +135,6 @@ $(document).ready(function() {
 
   /* sets up all listeners for user input */
   function listeners() {
-    console.log("listeners");
     $('#host-connection').selectable({
       selected: function(event, ui) {
         $(ui.selected).addClass("ui-selected").siblings().removeClass("ui-selected");
@@ -135,29 +149,23 @@ $(document).ready(function() {
     });
   }
 
-  function setInfo(div, key) {
-    var text = info[key]['description'][language]
-    if (text != "") {
-      $('#' + div).find('.select').attr("style", "display:none")
-      var inform = $('#' + div).find('.information')
-      inform.html("")
-      inform.attr("style", "display:inherit;")
-      inform.append('<p>' + text + '</p>')
-      inform.append('<br><button type="button" class="hideinfo">Okay</button>')
-      $('.hideinfo').on('click', function(e) {
-        console.log("click")
-        e.stopPropagation();
-        $(this).parent().hide();
-        $(this).parent().prev().show();
-      })
-    }
 
-
+  function minimize(what) {
+    $('#' + what).addClass("minimize");
+    $('#' + what).after("<span class='clear'>CLEAR</span>")
+    $(".clear").on("click", demini)
   }
 
-
+  function demini() {
+    $('.ui.selected').removeClass("ui-selected");
+    clearResults()
+    $('.minimize').removeClass("minimize");
+    $('.clear').remove();
+  }
   /* sets the image and text for host, and then adds options for target */
   function targetSet(event, ui) {
+    demini()
+    minimize("host-connection")
     var hostAll = $('#host-connection .ui-selected').map(function() {
       return $(this).text();
     }).get();
@@ -165,7 +173,6 @@ $(document).ready(function() {
     var targets = "";
     for (var i = 0; i < len; i++) {
       var host = hostAll[i];
-      setInfo('target', host)
       if (data.hasOwnProperty(host)) {
         for (var i in data[host]) {
           if (data[host].hasOwnProperty(i)) {
@@ -175,6 +182,7 @@ $(document).ready(function() {
       }
     }
     $('#out').html("");
+    $('#firstouttext').attr("style", "display:hidden")
     $('#target-connection').html(targets);
     $("#target-connection").selectable("refresh");
 
@@ -201,55 +209,80 @@ $(document).ready(function() {
   }
   /* outputs results based on hostinput and targetinput */
   function output(event, ui) {
-    $('#out').html("");
-
+    minimize("target-connection")
+    $('.results').html("<div id='out'></div>");
+    $('#out').before('<h3 id="firstouttext" class="text"> YOU WILL NEED </h3>');
     var host = $('#host-connection .ui-selected').map(function() {
       return $(this).text();
     }).get();
-    console.log("HOST");
-    console.log(host)
+
     var target = $('#target-connection .ui-selected').map(function() {
       return $(this).text();
     }).get();
-    console.log("TARGET");
-    console.log(target)
-    setInfo('host', target)
+
     var str = data[host][target];
     //NOTE: Adding to DOM every time. May be better t do strings instead?
     for (var i in str) {
       addSolution(i, str);
     }
-    $('#secondouttext').attr("style", "visibility:visible");
+
+    slideIndex = 1;
+    if (str.length > 1) {
+      slideShow()
+    }
   }
 
-  function addSolution(i, str) {
-    $('#out').append("<div class='result'><a href='http://plugable.com/" + language + "/products/" + str[i] + "' class='outlink' target='_top'></a></div>");
-    var link = $('.outlink:eq(' + i + ")");
-    link.append("");
-    link.append("<span class='outvar'>" + str[i] + "</span><br>");
-    link.append("<img class='outimg' id='outimg" + i + "'>");
-    link.parent().append('<p id="secondouttext" class="outtext">' + info[str[i]]['description'][language] + ' </p>')
-    imageSet($('#outimg' + i), str[i].toLowerCase(), false);
+  function addSolution(i, val) {
+    var str = "";
+    str += "<div class='result'><div class='resleft'>"
+    str += '<h3 class="productname">' + val[i] + '</h3>'
+    str += '<p class="outtext" id="secoundouttext">' + info[val[i]]['description'][language] + '</p>'
+    str += "<a href='http://plugable.com/" + language + "/products/" + val[i] + "' class='outlink' target='_top'>Purchase Here</a>"
+    str += "</div><div class='resright'>"
+    str += "<img class='outimg' id='outimg" + i + "'>"
+    str += "</div></div>"
+    console.log(str);
+    $('#out').append(str);
+    imageSet($('#outimg' + i), val[i].toLowerCase(), false);
 
   }
 
-  /* Clear functions. Reset the areas that might have been modified */
+  function slideShow() {
+    $('#out').prepend('<button class="slidearrow" id="slideback">&#10094;</button>')
+    $('#out').append('<button class="slidearrow" id="slideforward">&#10095;</button>')
+    $('#slideback').on('click', function() {
+      plusDivs(-1)
+    })
+    $('#slideforward').on('click', function() {
+      plusDivs(1)
+    })
+    showDivs(slideIndex);
+  }
 
-  function clearAll() {
-    $('#hostinfo').html("");
-    $('#host-connection').val("");
-    $('#hostimg').attr("src", "");
-    clearTarget();
+  function plusDivs(n) {
+    showDivs(slideIndex += n);
+  }
+
+  function showDivs(n) {
+    var i;
+    var len = $('.result').length;
+    if (n > len) {
+      slideIndex = 1
+    }
+    if (n < 1) {
+      slideIndex = len
+    }
+    $('.result').each(function(index) {
+      if (index == (slideIndex - 1)) {
+        $(this).attr("style", "display:block;")
+      } else {
+        $(this).attr("style", "display:none;")
+      }
+    });
   }
 
   function clearResults() {
-    $('#secondouttext').attr("style", "visibility:'hidden'");
-    $('#out').html("");
-  }
-
-
-  function showDescription(id) {
-    console.log("description")
-    $('#' + id).dialog("open");
+    $('#firstouttext').remove();
+    $('#out').remove();
   }
 });
